@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="" rel="stylesheet">
+    <meta name="author" content="pansijia_gz" />
+    <meta name="email" content="pasico@163.com" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <!-- 忽略将页面中的数字识别为电话号码 -->
+    <meta content="telephone=no" name="format-detection" />
+    <!-- 全屏应用模式 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <style>
+
+        #uploadedPhoto{visibility: hidden;}
+        #uploadedPhoto.show{visibility: visible;}
+        #uploadedPhoto.portrat{}
+        #uploadedPhoto.landscape{-webkit-transform:rotate(90deg) translateY(-228px);-webkit-transform-origin:top left; }
+
+    </style>
+    <title>拍照</title>
+</head>
+
+<body>
+    <div id="view" class="view ab fs">
+        <!-- 
+        注意
+        因为对于IOS 系统，需要IOS6+ 才有这功能，所以请做好兼容处理（用户提示）
+        -->
+        <!-- HTML -->
+
+
+        <!-- the button for uploading file , photo only -->
+        <div id="uploadCon" class="">
+            <input id="upload" class="upload " type="file" accept="image/*" capture />
+        </div>
+
+        <!-- show the photo which is uploaded by people -->
+        <img src="" alt="" id="uploadedPhoto" class="uploadedPhoto" width="">
+
+
+
+    </div>
+</body>
+<script src="pcauto1.1.js"></script>
+<!-- <script src="magazine.js"></script> -->
+<script>
+var $upload = $("#upload")
+var $uploadedPhoto = $("#uploadedPhoto")
+
+// bind event
+$upload.bind("change", function(e) {
+    var file = e.target.files[0];
+    displayAsImage(file);
+    // $photoReady.addClass("active")
+    g_uploaded = true;
+})
+// 不加这句的话，系统的“拍摄”冒泡图片出现的位置会不对
+$upload.bind("touchstart", function(e) {
+    e.stopPropagation();
+})
+// get base64 datas of the photo from system, and set to the <img> src.
+
+    function displayAsImage(file) { //显示图片
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        $uploadedPhoto.attr("width","")
+        $uploadedPhoto.attr("height","")
+        reader.onload = function(e) {
+            var dataURL = e.target.result;
+            // var _img = new Image()
+            // _img.id = "test";
+            // _img.onload = function() {
+            $uploadedPhoto.bind("load",function(){
+                var _w = $uploadedPhoto.get(0).width;
+                var _h = $uploadedPhoto.get(0).height;
+                // alert("_w is:"+_w+";& "+"_h is:"+_h)
+                // alert(_img.height+"__&__"+_img.width)
+                // $photo = $("#photo")
+                // if (_h < _w) {
+                //     $uploadedPhoto.removeClass("portrat").addClass("landscape")
+                //     // alert("landscape")
+                //     $uploadedPhoto.attr("width", 357);
+                //     $uploadedPhoto.attr("height", 228);
+                //     // _img.height=556;
+                // } else {
+                //     $uploadedPhoto.removeClass("landscape").addClass("portrat")
+                //     $uploadedPhoto.attr("width", 228);
+                //     $uploadedPhoto.attr("height", 357);
+                //     // alert("portrat")
+                // }
+                $uploadedPhoto.addClass("show");
+            })
+            $uploadedPhoto.attr("src", dataURL);
+            // _img.src = dataURL;
+        }
+    }
+</script>
+
+</html>
